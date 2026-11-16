@@ -184,6 +184,7 @@ function draw() {
                     enemyX[a] = -1000
                     enemyY[a] = -1000
                     bullets.splice(i,1)
+                    break
                 }
         }
     }
