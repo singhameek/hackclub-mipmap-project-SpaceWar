@@ -215,15 +215,17 @@ function gameLogic() {
     rectMode(CORNER)
     stroke(255)
     fill(255)
-    rect(50, 5, 100, 2)
-    rect(200, 5, 100, 2)
+    rect(60, 5, 100, 2)
+    rect(300, 5, 100, 2)
     fill(255, 0, 0)
-    rect(50, 5, boostLevel, 2)
-    rect(200, 5, playerHealth, 2)
+    rect(60, 5, boostLevel, 2)
+    rect(300, 5, playerHealth, 2)
     noStroke()
     fill(255)
-    text("Boost", 10, 10)
-    text("Health", 160, 10)
+    textSize(15)
+    textAlign(CENTER, CENTER)
+    text("Boost", 20, 10)
+    text("Health", 260, 10)
 
 
 
@@ -306,6 +308,8 @@ function home() {
     rect(width / 2, 500, 100, 50, 10, 10, 10, 10)
     fill(255)
     text("Play", width / 2, 505)
+
+    text("Controls: Move with mouse, LMB to fire. Space to boost", width/2, 700)
 }
 
 function gameEnd() {
@@ -330,6 +334,7 @@ function gameEnd() {
         color[2] = 20
         color[3] = 20
     }
+    rectMode(CENTER)
     fill(color[1], color[2], color[3])
     rect(width / 2, 600, 100, 50, 10, 10, 10, 10)
     fill(255)
