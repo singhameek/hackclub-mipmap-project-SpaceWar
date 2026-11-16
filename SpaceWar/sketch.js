@@ -98,21 +98,24 @@ function draw() {
 
         pop()
 
-        for(let b of enemybullets){
-            fill(210,20,20)
-            rect(b.x,b.y,5,10)
-            b.x += b.vx
-            b.y += b.vy
-        }
-
-        let tol = 25
-        for(let b2 of enemybullets){
-            if(abs(pX - b2.x) <= tol && abs(pY - b2.y) <= tol){
-                playerHealth -= 10
-            }
-        }
 
     }
+
+    for (let b of enemybullets) {
+        fill(210, 20, 20)
+        rect(b.x, b.y, 5, 10)
+        b.x += b.vx
+        b.y += b.vy
+    }
+
+    let tol = 25
+    for (let i = enemybullets.length - 1; i >= 0; i--) {
+        if (abs(pX - enemybullets[i].x) <= tol && abs(pY - enemybullets[i].y) <= tol) {
+            playerHealth -= 10
+            enemybullets.splice(i, 1)
+        }
+    }
+
 
 
     if (mouseX > pX) {
@@ -154,55 +157,63 @@ function draw() {
 
 
     stroke(255)
+    fill(255)
+    rect(50,5,100,2)
+    rect(200,5,100,2)
+    fill(255,0,0)
     rect(50, 5, boostLevel, 2)
+    rect(200,5,playerHealth, 2)
     noStroke()
     fill(255)
     text("Boost", 10, 10)
+    text("Health", 160,10)
 
 
 
-    for (let b of bullets) {
+    for (let i = bullets.length - 1; i >= 0; i--) {
         fill(210, 20, 20)
-        rect(b.x, b.y, 4, 10)
-        b.x += b.vx
-        b.y += b.vy
+        rect(bullets[i].x, bullets[i].y, 4, 10)
+        bullets[i].x += bullets[i].vx
+        bullets[i].y += bullets[i].vy
 
         let tol = 25
-        for (let a = 0; a < enemyX.length; a++) {
-            for(let b2 of bullets)
-            if (abs(enemyX[a] - b2.x) <= tol && abs(enemyY[a] - b2.y) <= tol) {
-                if(dead.includes(a)) { continue }
-                dead.push(a)
-                enemyX[a] = -1000
-                enemyY[a] = -1000
-            }
+        for (let a = enemyX.length -1; a >= 0 ; a--) {
+                if (abs(enemyX[a] - bullets[i].x) <= tol && abs(enemyY[a] - bullets[i].y) <= tol) {
+                    if (dead.includes(a)) { continue }
+                    dead.push(a)
+                    enemyX[a] = -1000
+                    enemyY[a] = -1000
+                    bullets.splice(i,1)
+                }
         }
     }
 
-    if(dead.length == enemyX.length){
+    if (dead.length == enemyX.length) {
         background(0)
         fill(255)
         textSize(100)
         textAlign(CENTER)
-        text("You win!!", width/2, height/2)
+        text("You win!!", width / 2, height / 2)
         noLoop()
+        return
     }
 
 
-    if(playerHealth <= 0){
+    if (playerHealth <= 0) {
         background(0)
         fill(255)
         textSize(100)
         textAlign(CENTER)
-        text("You died :(", width/2, height/2)
+        text("You died :(", width / 2, height / 2)
         noLoop()
+        return
     }
 
 
 
 
-    let rand = floor(random(0,1000))
-    if(rand == 100){
+    let rand = floor(random(0, 100))
+    if (rand == 10) {
         enemyFire()
     }
 
@@ -239,13 +250,14 @@ function fire() {
 }
 
 
-function enemyFire(){
+function enemyFire() {
     let rand = floor(random(0, enemyX.length))
+    while (dead.includes(rand)) { rand = floor(random(0, enemyX.length)) }
     let bulletX = enemyX[rand]
     let bulletY = enemyY[rand]
 
-    let VbulletX = cos(enemySpin[a] - 90) * 10
-    let VbulletY = sin(enemySpin[a] - 90) * 10
+    let VbulletX = cos(enemySpin[rand] - 90) * 10
+    let VbulletY = sin(enemySpin[rand] - 90) * 10
 
 
 
