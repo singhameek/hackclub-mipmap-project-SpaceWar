@@ -228,7 +228,7 @@ function gameLogic() {
 
 
     for (let i = bullets.length - 1; i >= 0; i--) {
-        fill(210, 20, 20)
+        fill(20, 210, 20)
         rect(bullets[i].x, bullets[i].y, 4, 10)
         bullets[i].x += bullets[i].vx
         bullets[i].y += bullets[i].vy
@@ -352,45 +352,11 @@ function canvasSetup() {
     playerHealth = 100
 
 
-    for (let j = 0; j < enemyX.length; j++) {
-        if (dead.includes(j)) { continue }
-
-
-        if (enemyX[j] > pX) {
-            enemyX[j] -= 0.5
-        }
-        else if (enemyX[j] < pX) {
-            enemyX[j] += 0.5
-        }
-
-        if (enemyY[j] > pY) {
-            enemyY[j] -= 0.5
-        }
-        else if (enemyY[j] < pY) {
-            enemyY[j] += 0.5
-        }
-
-
-
-        for (let k = 0; k < enemyX.length; k++) {
-            if (dead.includes(k)) { continue }
-            if (j != k) {
-                let d = dist(enemyX[j], enemyY[j], enemyX[k], enemyY[k])
-
-                if (d < 45) {
-                    let stren = (45 - d) / 10
-                    if (enemyX[j] > enemyX[k]) {
-                        enemyX[j] += stren
-                    } else {
-                        enemyX[j] -= stren
-                    }
-                    if (enemyY[j] > enemyY[k]) {
-                        enemyY[j] += stren
-                    } else {
-                        enemyY[j] -= stren
-                    }
-                }
-            }
-        }
+    for (let i = 0; i < 10; i++) {
+        let cEX = floor(random(10, 990))
+        let cEY = floor(random(10, 990))
+        enemyX[i] = cEX
+        enemyY[i] = cEY
+        console.log(enemyX[i], enemyY[i])
     }
 }
