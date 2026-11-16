@@ -2,11 +2,13 @@ let pX = 400, pY = 700
 let enemyX = []
 let enemyY = []
 let dead = []
-let bullets = []
+let bullets = [], enemybullets = []
 let enemy, player
 let playerSpin = 0
 let boostLevel = 100
 let speed = 1
+let playerHealth = 100
+let enemySpin
 
 
 
@@ -83,8 +85,6 @@ function draw() {
         }
 
 
-
-        let enemySpin = 0
         let dx = pX - enemyX[j]
         let dy = pY - enemyY[j]
         enemySpin = degrees(Math.atan2(dy, dx)) + 90
@@ -97,6 +97,21 @@ function draw() {
 
 
         pop()
+
+        for(let b of enemybullets){
+            fill(210,20,20)
+            rect(b.x,b.y)
+            b.x += b.vx
+            b.y += b.vy
+        }
+
+        let tol = 25
+        for(let b2 of enemybullets){
+            if(abs(pX - b2.x) <= tol && abs(pY - b2.y) <= tol){
+                playerHealth -= 10
+            }
+        }
+
     }
 
 
@@ -190,6 +205,24 @@ function draw() {
         noLoop()
     }
 
+
+    if(playerHealth <= 0){
+        background(0)
+        fill(255)
+        textSize(100)
+        textAlign(CENTER)
+        text("You died :(", width/2, height/2)
+        noLoop()
+    }
+
+
+
+
+    let rand = floor(random(0,1000))
+    if(rand == 100){
+        enemyFire()
+    }
+
 }
 
 
@@ -210,4 +243,19 @@ function fire() {
 
 
     bullets.push({ x: bulletX, y: bulletY, vx: VbulletX, vy: VbulletY })
+}
+
+
+function enemyFire(){
+    let rand = floor(random(0, enemyX.length))
+    let bulletX = enemyX[rand]
+    let bulletY = enemyY[rand]
+
+    let VbulletX = cos(enemySpin - 90) * 10
+    let VbulletY = sin(enemySpin - 90) * 10
+
+
+
+
+    enemybullets.push({ x: bulletX, y: bulletY, vx: VbulletX, vy: VbulletY })
 }
