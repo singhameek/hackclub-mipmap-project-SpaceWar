@@ -8,7 +8,7 @@ let playerSpin = 0
 let boostLevel = 100
 let speed = 1
 let playerHealth = 100
-let enemySpin
+let enemySpin = []
 
 
 
@@ -87,11 +87,11 @@ function draw() {
 
         let dx = pX - enemyX[j]
         let dy = pY - enemyY[j]
-        enemySpin = degrees(Math.atan2(dy, dx)) + 90
+        enemySpin[j] = degrees(Math.atan2(dy, dx)) + 90
 
         push()
         translate(enemyX[j], enemyY[j])
-        rotate(enemySpin)
+        rotate(enemySpin[j])
         image(enemy, 0, 0, 40, 40)
 
 
@@ -100,7 +100,7 @@ function draw() {
 
         for(let b of enemybullets){
             fill(210,20,20)
-            rect(b.x,b.y)
+            rect(b.x,b.y,5,10)
             b.x += b.vx
             b.y += b.vy
         }
@@ -113,18 +113,6 @@ function draw() {
         }
 
     }
-
-
-
-
-    push()
-    translate(pX, pY)
-    rotate(playerSpin)
-    image(player, 0, 0, 40, 40)
-    pop()
-
-
-
 
 
     if (mouseX > pX) {
@@ -151,21 +139,15 @@ function draw() {
     }
 
 
-
-
-    if (!keyIsDown('Space')) {
-        speed = 1
-        if (boostLevel < 100) {
-            boostLevel += 0.2
-        }
-    }
-
     if (keyIsDown('Space') && boostLevel > 0) {
         boostLevel -= 1
         speed = 5
     }
     else {
         speed = 1
+        if (boostLevel < 100) {
+            boostLevel += 0.2
+        }
     }
 
 
@@ -189,6 +171,7 @@ function draw() {
         for (let a = 0; a < enemyX.length; a++) {
             for(let b2 of bullets)
             if (abs(enemyX[a] - b2.x) <= tol && abs(enemyY[a] - b2.y) <= tol) {
+                if(dead.includes(a)) { continue }
                 dead.push(a)
                 enemyX[a] = -1000
                 enemyY[a] = -1000
@@ -223,6 +206,16 @@ function draw() {
         enemyFire()
     }
 
+
+
+
+
+    push()
+    translate(pX, pY)
+    rotate(playerSpin)
+    image(player, 0, 0, 40, 40)
+    pop()
+
 }
 
 
@@ -251,8 +244,8 @@ function enemyFire(){
     let bulletX = enemyX[rand]
     let bulletY = enemyY[rand]
 
-    let VbulletX = cos(enemySpin - 90) * 10
-    let VbulletY = sin(enemySpin - 90) * 10
+    let VbulletX = cos(enemySpin[a] - 90) * 10
+    let VbulletY = sin(enemySpin[a] - 90) * 10
 
 
 
