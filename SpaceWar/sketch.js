@@ -212,7 +212,7 @@ function gameLogic() {
 
 
 
-
+    rectMode(CORNER)
     stroke(255)
     fill(255)
     rect(50, 5, 100, 2)
