@@ -24,10 +24,20 @@ async function setup() {
 }
 
 function draw() {
+    pX = constrain(pX, 10, 990)
+    pY = constrain(pY, 10, 990)
+
+
+
     background(0);
-    if (!enemy) return // as of right now (early dev) enemy throws undefined error so this skips function draw until it is defined
+
+
+    if (!enemy) return
+
+
+
     for (let j = 0; j < enemyX.length; j++) {
-        image(enemy, enemyX[j], enemyY[j], 40, 40)
+        
 
         if (enemyX[j] > pX) {
             enemyX[j]--
@@ -44,35 +54,43 @@ function draw() {
         }
 
 
+
+        for(let k = 0; k < enemy)
+
+
         enemyX[j] = constrain(enemyX[j], 10, 990)
         enemyY[j] = constrain(enemyY[j], 10, 990)
+
+
+        image(enemy, enemyX[j], enemyY[j], 40, 40)
     }
 
+
+
+
     push()
-    translate(pX, pY)
+    translate(pX + 10, pY)
     rotate(playerSpin)
     image(player, 0, 0, 40, 40)
     pop()
 
 
-    if (keyIsDown(UP_ARROW)) {
-        pY -= 2
-        playerSpin = 0
+
+
+
+    if(mouseX > pX){
+        pX ++
+    }
+    else if(mouseX < pX){
+        pX--
     }
 
-    else if (keyIsDown(DOWN_ARROW)) {
-        pY += 2
-        playerSpin = 180
+    if(mouseY > pY){
+        pY ++
     }
 
-    else if (keyIsDown(LEFT_ARROW)) {
-        pX -= 2
-        playerSpin = 270
-    }
-
-    else if (keyIsDown(RIGHT_ARROW)) {
-        pX += 2
-        playerSpin = 90
+    if(mouseY < pY){
+        pY--
     }
 
 
