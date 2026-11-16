@@ -43,10 +43,6 @@ function draw() {
         gameEnd()
     }
 
-
-
-
-
 }
 
 
@@ -54,6 +50,10 @@ function mousePressed() {
     console.log(mouseX, mouseY)
     if (playing == 1) { fire() }
     if (playing == 0 && mouseX > 450 && mouseX < 550 && mouseY > 475 && mouseY < 525) { playing = 1 }
+    if (playing == 2 && mouseX > 450 && mouseX < 550 && mouseY > 575 && mouseY < 625) {
+        canvasSetup()
+        playing = 1
+    }
 }
 
 
@@ -248,6 +248,7 @@ function gameLogic() {
 
     if (dead.length == enemyX.length || playerHealth <= 0) {
         playing = 2
+        return
     }
 
 
@@ -308,14 +309,16 @@ function home() {
 }
 
 function gameEnd() {
+    let color = [0, 0, 0]
     if (dead.length == enemyX.length) {
         background(0)
         fill(255)
         textSize(100)
         textAlign(CENTER)
         text("You win!!", width / 2, height / 2)
-        noLoop()
-        return
+        color[1] = 20
+        color[2] = 210
+        color[3] = 20
     }
     else {
         background(0)
@@ -323,7 +326,71 @@ function gameEnd() {
         textSize(100)
         textAlign(CENTER)
         text("You died :(", width / 2, height / 2)
-        noLoop()
-        return
+        color[1] = 210
+        color[2] = 20
+        color[3] = 20
+    }
+    fill(color[1], color[2], color[3])
+    rect(width / 2, 600, 100, 50, 10, 10, 10, 10)
+    fill(255)
+    textSize(25)
+    text("Restart?", width / 2, 605)
+
+}
+
+function canvasSetup() {
+    enemyX.length = 0
+    enemyY.length = 0
+    bullets.length = 0
+    enemybullets.length = 0
+    dead.length = 0
+    enemySpin.length = 0
+    pX = 400
+    pY = 700
+    boostLevel = 100
+    speed = 1
+    playerHealth = 100
+
+
+    for (let j = 0; j < enemyX.length; j++) {
+        if (dead.includes(j)) { continue }
+
+
+        if (enemyX[j] > pX) {
+            enemyX[j] -= 0.5
+        }
+        else if (enemyX[j] < pX) {
+            enemyX[j] += 0.5
+        }
+
+        if (enemyY[j] > pY) {
+            enemyY[j] -= 0.5
+        }
+        else if (enemyY[j] < pY) {
+            enemyY[j] += 0.5
+        }
+
+
+
+        for (let k = 0; k < enemyX.length; k++) {
+            if (dead.includes(k)) { continue }
+            if (j != k) {
+                let d = dist(enemyX[j], enemyY[j], enemyX[k], enemyY[k])
+
+                if (d < 45) {
+                    let stren = (45 - d) / 10
+                    if (enemyX[j] > enemyX[k]) {
+                        enemyX[j] += stren
+                    } else {
+                        enemyX[j] -= stren
+                    }
+                    if (enemyY[j] > enemyY[k]) {
+                        enemyY[j] += stren
+                    } else {
+                        enemyY[j] -= stren
+                    }
+                }
+            }
+        }
     }
 }
