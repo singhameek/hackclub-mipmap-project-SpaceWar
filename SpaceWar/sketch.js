@@ -1,6 +1,8 @@
 let pX = 400, pY = 700
 let enemyX = []
 let enemyY = []
+let dead = []
+let bullets = []
 let enemy, player
 let playerSpin = 0
 let boostLevel = 100
@@ -29,7 +31,7 @@ async function setup() {
 function draw() {
     pX = constrain(pX, 10, 990)
     pY = constrain(pY, 10, 990)
-    boostLevel = constrain(boostLevel,0,100)
+    boostLevel = constrain(boostLevel, 0, 100)
 
 
     background(0);
@@ -40,6 +42,7 @@ function draw() {
 
 
     for (let j = 0; j < enemyX.length; j++) {
+        if (dead.includes(j)) { continue }
 
 
         if (enemyX[j] > pX) {
@@ -59,6 +62,7 @@ function draw() {
 
 
         for (let k = 0; k < enemyX.length; k++) {
+            if (dead.includes(k)) { continue }
             if (j != k) {
                 let d = dist(enemyX[j], enemyY[j], enemyX[k], enemyY[k])
 
@@ -79,8 +83,6 @@ function draw() {
         }
 
 
-        enemyX[j] = constrain(enemyX[j], 10, 990)
-        enemyY[j] = constrain(enemyY[j], 10, 990)
 
         let enemySpin = 0
         let dx = pX - enemyX[j]
@@ -147,7 +149,7 @@ function draw() {
         boostLevel -= 1
         speed = 5
     }
-    else{
+    else {
         speed = 1
     }
 
@@ -161,9 +163,51 @@ function draw() {
     text("Boost", 10, 10)
 
 
+
+    for (let b of bullets) {
+        fill(210, 20, 20)
+        rect(b.x, b.y, 4, 10)
+        b.x += b.vx
+        b.y += b.vy
+
+        let tol = 25
+        for (let a = 0; a < enemyX.length; a++) {
+            for(let b2 of bullets)
+            if (abs(enemyX[a] - b2.x) <= tol && abs(enemyY[a] - b2.y) <= tol) {
+                dead.push(a)
+                enemyX[a] = -1000
+                enemyY[a] = -1000
+            }
+        }
+    }
+
+    if(dead.length == enemyX.length){
+        background(0)
+        fill(255)
+        textSize(100)
+        textAlign(CENTER)
+        text("You win!!", width/2, height/2)
+        noLoop()
+    }
+
 }
 
 
 function mousePressed() {
     console.log(mouseX, mouseY)
+    fire()
+}
+
+
+function fire() {
+    let bulletX = pX
+    let bulletY = pY
+
+    let VbulletX = cos(playerSpin - 90) * 10
+    let VbulletY = sin(playerSpin - 90) * 10
+
+
+
+
+    bullets.push({ x: bulletX, y: bulletY, vx: VbulletX, vy: VbulletY })
 }
